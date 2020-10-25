@@ -1,0 +1,6 @@
+{
+    "mongoURL" : "mongodb+srv://taskapp:maimaiiuem@cluster0.ysix1.mongodb.net/devconnector?retryWrites=true&w=majority",
+    "jwtSecret": "namdepzainhat",
+    "githubClientId": "3ad646802432f777969c",
+    "githubSecret": "16abf2c52d14b8756e8858f61a97dfef24d865cf"
+}
