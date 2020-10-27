@@ -8,6 +8,22 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
     const authLinks = (
         <ul>
             <li>
+                <Link to="/profiles">
+                    Danh sách người dùng
+                </Link>
+            </li>
+            <li>
+                <Link to="/posts">
+                    Bài đăng thảo luận
+                </Link>
+            </li>
+            <li>
+                <Link to="/dashboard">
+                    <i className="fas fa-user"></i>{' '}
+                    <span className="hide-sm">Cá nhân</span>
+                </Link>
+            </li>
+            <li>
                 <a onClick={logout} href="#!">
                     <i className="fas fa-sign-out-alt"></i>{' '}
                     <span className="hide-sm">Dang xuat</span>
@@ -18,7 +34,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 
     const guestLink = (
         <ul>
-            <li><a href="#!">Người dùng</a></li>
+            <li><Link to="/profiles">Danh sách người dùng</Link></li>
             <li><Link to="/register">Đăng kí</Link></li>
             <li><Link to="/login">Đăng nhập</Link></li>
         </ul>

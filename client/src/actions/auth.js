@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from './types';
+import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_PROFILE } from './types';
 import setAuthToken from '../untils/setAuthToken';
 //Load user sau khi da auth
 export const loadUser = () => async dispatch => {
+
     if (localStorage.token) {
         setAuthToken(localStorage.token);
     }
 
     try {
-
         const res = await axios.get('/api/auth');
 
         dispatch({
@@ -86,5 +86,6 @@ export const login = ({ email, password }) => async dispatch => {
 
 //LOGOUT 
 export const logout = () => dispatch => {
+    dispatch({ type: CLEAR_PROFILE });
     dispatch({ type: LOGOUT });
 }

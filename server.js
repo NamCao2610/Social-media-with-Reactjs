@@ -1,5 +1,6 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const path = require('path');
 const userRouter = require('./routes/api/users');
 const authRouter = require('./routes/api/auth');
 const profileRouter = require('./routes/api/profile');
@@ -19,14 +20,19 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => {
-    res.send('Day la nam dep zai');
-})
 
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/posts', postRouter);
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
 
 app.listen(port, () => {
     console.log(`Server dang chay port ${port}`)

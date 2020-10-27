@@ -12,8 +12,8 @@ const User = require('../../models/User');
 router.get('/', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
-        res.json({ user });
-    } catch(err) {
+        res.json(user);
+    } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
@@ -23,47 +23,47 @@ router.get('/', auth, async (req, res) => {
 //Authenticate user & get token
 //Truy cap ko auth
 router.post('/', [
-   check('email', 'Vui long nhap dung email').isEmail(),
-   check('password', 'Vui long khong bo trong mat khau').exists()
+    check('email', 'Vui long nhap dung email').isEmail(),
+    check('password', 'Vui long khong bo trong mat khau').exists()
 ],
-async (req, res) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array() });
-    }
-    const { email, password} = req.body;
-    console.log(req.body);
-    try {
-        //Kiem tra neu User da ton tai
-        let user = await User.findOne({ email });
-
-        if(!user) {
-            return res.status(400).json({ errors: [{ msg: 'Tai khoan hoac mat khau da bi sai'}]});
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
         }
-        
-        // So sanh mat khau 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const { email, password } = req.body;
+        console.log(req.body);
+        try {
+            //Kiem tra neu User da ton tai
+            let user = await User.findOne({ email });
 
-        if(!isMatch) {
-            return res.status(400).json({ errors: [{ msg: 'Mat khau bi sai'}]});
-        }
-
-        //Return token user
-        const payload = {
-            user: {
-                id: user.id
+            if (!user) {
+                return res.status(400).json({ errors: [{ msg: 'Tai khoan hoac mat khau da bi sai' }] });
             }
-        }
 
-        jwt.sign(payload, config.get('jwtSecret'),{ expiresIn : 360000} ,(err, token) => {
-            if(err) throw err;
-            res.json({ token })
-        })
-        
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-})
+            // So sanh mat khau 
+            const isMatch = await bcrypt.compare(password, user.password);
+
+            if (!isMatch) {
+                return res.status(400).json({ errors: [{ msg: 'Mat khau bi sai' }] });
+            }
+
+            //Return token user
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            }
+
+            jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+                if (err) throw err;
+                res.json({ token })
+            })
+
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+    })
 
 module.exports = router;
